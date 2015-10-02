@@ -1,5 +1,6 @@
 package com.codepath.apps.hmtweetsapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -9,7 +10,7 @@ import com.codepath.apps.hmtweetsapp.R;
 import com.codepath.apps.hmtweetsapp.TwitterClient;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
 
-/*
+/**
  * Activity where the user signs in
  */
 public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
@@ -32,9 +33,8 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 	// i.e Display application "homepage"
 	@Override
 	public void onLoginSuccess() {
-		Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show();
-		// Intent i = new Intent(this, PhotosActivity.class);
-		// startActivity(i);
+		Intent i = new Intent(this, TimelineActivity.class);
+		startActivity(i);
 	}
 
 	// OAuth authentication flow failed, handle the error
