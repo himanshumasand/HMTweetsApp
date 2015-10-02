@@ -1,6 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="15dp">
 
-</LinearLayout>
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:id="@+id/ivProfilePic"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/ic_launcher"
+        android:layout_marginRight="10dp"
+        android:padding="4dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:id="@+id/tvName"
+        android:layout_alignTop="@+id/ivProfilePic"
+        android:layout_toRightOf="@+id/ivProfilePic"
+        android:layout_toEndOf="@+id/ivProfilePic"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textColor="#424242"
+        android:ellipsize="end"
+        android:singleLine="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="screenname"
+        android:id="@+id/tvScreenName"
+        android:layout_alignBottom="@+id/tvName"
+        android:layout_toRightOf="@+id/tvName"
+        android:layout_toEndOf="@+id/tvName"
+        android:layout_marginLeft="5dp"
+        android:textSize="12sp"
+        android:ellipsize="end"
+        android:singleLine="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tweet body"
+        android:id="@+id/tvBody"
+        android:layout_below="@+id/tvName"
+        android:layout_toRightOf="@+id/ivProfilePic"
+        android:layout_toEndOf="@+id/ivProfilePic"
+        android:textColor="#585858"
+        android:textSize="14sp"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:autoLink="all"
+        android:linksClickable="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="xh"
+        android:id="@+id/tvTime"
+        android:layout_alignTop="@+id/tvName"
+        android:layout_alignRight="@+id/tvBody"
+        android:layout_alignEnd="@+id/tvBody"
+        android:gravity="center_vertical|right"
+        android:textSize="12sp" />
+
+</RelativeLayout>
