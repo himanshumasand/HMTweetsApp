@@ -15,14 +15,6 @@
         android:layout_alignParentStart="true"
         android:src="@drawable/ic_launcher" />
 
-    <ImageButton
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:id="@+id/ibClose"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,7 +23,11 @@
         android:layout_alignLeft="@+id/ivUserPic"
         android:layout_alignStart="@+id/ivUserPic"
         android:layout_marginTop="30dp"
-        android:hint="What&apos;s happening?" />
+        android:maxLength="140"
+        android:inputType="textMultiLine"
+        android:hint="What&apos;s happening?"
+        android:gravity="start"
+        android:lines="5" />
 
     <Button
         android:layout_width="wrap_content"
@@ -52,5 +48,14 @@
         android:layout_toStartOf="@+id/btTweet"
         android:layout_marginBottom="15dp"
         android:layout_marginRight="5dp" />
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:id="@+id/ivClose"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_close" />
 
 </RelativeLayout>

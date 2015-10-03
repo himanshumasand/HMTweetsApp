@@ -2,9 +2,10 @@ package com.codepath.apps.hmtweetsapp.fragments;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,25 +14,22 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.apps.hmtweetsapp.R;
 import com.codepath.apps.hmtweetsapp.TwitterApplication;
-import com.codepath.apps.hmtweetsapp.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 
 public class ComposeTweetDialog extends DialogFragment implements View.OnClickListener {
 
     private ImageView ivUserPic;
-    private ImageButton ibClose;
+    private ImageView ivClose;
     private EditText etTweet;
     private Button btTweet;
     private TextView tvCharCount;
@@ -82,14 +80,30 @@ public class ComposeTweetDialog extends DialogFragment implements View.OnClickLi
         View view = inflater.inflate(R.layout.fragment_compose_tweet, container, false);
 
         ivUserPic = (ImageView) view.findViewById(R.id.ivUserPic);
-        ibClose = (ImageButton) view.findViewById(R.id.ibClose);
+        ivClose = (ImageView) view.findViewById(R.id.ivClose);
         etTweet = (EditText) view.findViewById(R.id.etTweet);
         btTweet = (Button) view.findViewById(R.id.btTweet);
         tvCharCount = (TextView) view.findViewById(R.id.tvCharCount);
 
-        ibClose.setOnClickListener(this);
-        btTweet.setOnClickListener(this);
         tvCharCount.setText("140");
+        etTweet.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                tvCharCount.setText(String.valueOf(140 - s.length()));
+            }
+        });
+        ivClose.setOnClickListener(this);
+        btTweet.setOnClickListener(this);
 
         return view;
     }
@@ -117,7 +131,7 @@ public class ComposeTweetDialog extends DialogFragment implements View.OnClickLi
 
                 break;
 
-            case R.id.ibClose:
+            case R.id.ivClose:
                 dismiss();
                 break;
         }
