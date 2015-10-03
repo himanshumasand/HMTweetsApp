@@ -35,7 +35,8 @@ public class TwitterClient extends OAuthBaseClient {
 
 	/**
 	 * Gets the home timeline by making a GET call
-	 * @param handler callback
+	 * @param handler   callback
+     * @param maxId
 	 */
 	public void getHomeTimeline(AsyncHttpResponseHandler handler, long maxId) {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
@@ -49,4 +50,18 @@ public class TwitterClient extends OAuthBaseClient {
         }
         getClient().get(apiUrl, params, handler);
 	}
+
+    /**
+     * Updates the authenticating user’s current status, also known as Tweeting.
+     * @param handler   callback
+     * @param status    Text to be posted in the tweet
+     */
+    public void postTweet(AsyncHttpResponseHandler handler, String status) {
+		String apiUrl = getApiUrl("statuses/update.json");
+		RequestParams params = new RequestParams();
+        params.put("status", status);
+        getClient().post(apiUrl, params, handler);
+	}
+
+
 }

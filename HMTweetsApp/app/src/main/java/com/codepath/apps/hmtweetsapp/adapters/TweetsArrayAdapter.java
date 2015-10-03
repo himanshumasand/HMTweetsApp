@@ -1,10 +1,7 @@
 package com.codepath.apps.hmtweetsapp.adapters;
 
 import android.content.Context;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.format.DateUtils;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
