@@ -12,6 +12,7 @@ import com.codepath.apps.hmtweetsapp.TwitterApplication;
 import com.codepath.apps.hmtweetsapp.TwitterClient;
 import com.codepath.apps.hmtweetsapp.adapters.TweetsArrayAdapter;
 import com.codepath.apps.hmtweetsapp.models.Tweet;
+import com.codepath.apps.hmtweetsapp.utils.EndlessScrollListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -25,10 +26,20 @@ import java.util.ArrayList;
  */
 public class TimelineActivity extends AppCompatActivity {
 
+    private static long minTweetId = Long.MAX_VALUE;
+
     private TwitterClient mClient;
     private ArrayList<Tweet> mTweetsArray;
     private TweetsArrayAdapter mTweetsAdapter;
     private ListView mLvTweets;
+
+    public static long getMinTweetId() {
+        return minTweetId;
+    }
+
+    public static void setMinTweetId(long id) {
+        minTweetId = id;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +47,7 @@ public class TimelineActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timeline);
 
         setupViewObjects();
+        mClient = TwitterApplication.getTwitterClient();
         populateTimeline();
     }
 
@@ -47,7 +59,13 @@ public class TimelineActivity extends AppCompatActivity {
         mTweetsArray = new ArrayList<>();
         mTweetsAdapter = new TweetsArrayAdapter(this, mTweetsArray);
         mLvTweets.setAdapter(mTweetsAdapter);
-        mClient = TwitterApplication.getTwitterClient();
+        mLvTweets.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                populateTimeline();
+                return true;
+            }
+        });
     }
 
     /**
@@ -65,28 +83,6 @@ public class TimelineActivity extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("DEBUG", errorResponse.toString());
             }
-        });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_timeline, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        }, minTweetId);
     }
 }

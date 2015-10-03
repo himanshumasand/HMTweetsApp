@@ -1,5 +1,7 @@
 package com.codepath.apps.hmtweetsapp.models;
 
+import com.codepath.apps.hmtweetsapp.activities.TimelineActivity;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,6 +80,9 @@ public class Tweet {
                 Tweet tweet = fromJSON(tweetJson);
                 if(tweet != null) {
                     tweets.add(tweet);
+                    if(tweet.id < TimelineActivity.getMinTweetId()) {
+                        TimelineActivity.setMinTweetId(tweet.id);
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
