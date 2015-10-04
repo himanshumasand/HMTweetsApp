@@ -91,8 +91,11 @@ public class Tweet {
                 Tweet tweet = fromJSON(tweetJson);
                 if(tweet != null) {
                     tweets.add(tweet);
-                    if(tweet.id < TimelineActivity.getMinTweetId()) {
-                        TimelineActivity.setMinTweetId(tweet.id);
+                    if(tweet.id < TimelineActivity.getTweetsMaxId()) {
+                        TimelineActivity.setTweetsMaxId(tweet.id);
+                    }
+                    if(tweet.id > TimelineActivity.getTweetsSinceId()) {
+                        TimelineActivity.setTweetsSinceId(tweet.id);
                     }
                 }
             } catch (JSONException e) {

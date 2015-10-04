@@ -76,7 +76,7 @@
         android:layout_alignLeft="@+id/tvBody"
         android:layout_alignStart="@+id/tvBody"
         android:layout_marginTop="10dp"
-        android:scaleType="center"
+        android:scaleType="centerCrop"
         android:adjustViewBounds="true" />
 
 </RelativeLayout>
