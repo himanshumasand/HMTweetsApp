@@ -1,13 +1,10 @@
 package com.codepath.apps.hmtweetsapp.activities;
 
 import android.app.FragmentManager;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -80,7 +77,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
         ivNewTweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openComposeTweetDialog();
+                openComposeTweetDialog("");
             }
         });
     }
@@ -143,9 +140,9 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
         }, sinceId, maxId);
     }
 
-    private void openComposeTweetDialog() {
+    public void openComposeTweetDialog(String replyText) {
         FragmentManager fm = getFragmentManager();
-        ComposeTweetDialog composeTweetDialog = ComposeTweetDialog.newInstance(mUserProfilePicUrl);
+        ComposeTweetDialog composeTweetDialog = ComposeTweetDialog.newInstance(mUserProfilePicUrl, replyText);
         composeTweetDialog.show(fm, "fragment_compose_tweet");
     }
 

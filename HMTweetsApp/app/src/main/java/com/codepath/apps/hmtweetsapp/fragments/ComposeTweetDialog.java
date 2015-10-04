@@ -43,10 +43,11 @@ public class ComposeTweetDialog extends DialogFragment implements View.OnClickLi
         void onComposeTweetSuccess();
     }
 
-    public static ComposeTweetDialog newInstance(String profilePicUrl) {
+    public static ComposeTweetDialog newInstance(String profilePicUrl, String replyText) {
         ComposeTweetDialog fragment = new ComposeTweetDialog();
         Bundle args = new Bundle();
         args.putString("url", profilePicUrl);
+        args.putString("replyText", replyText);
         fragment.setArguments(args);
         return fragment;
     }
@@ -86,7 +87,9 @@ public class ComposeTweetDialog extends DialogFragment implements View.OnClickLi
         tvCharCount = (TextView) view.findViewById(R.id.tvCharCount);
 
         Picasso.with(getActivity()).load(getArguments().getString("url")).into(ivUserPic);
-        tvCharCount.setText("140");
+        etTweet.setText(getArguments().getString("replyText"));
+        etTweet.setSelection(etTweet.getText().length());
+        tvCharCount.setText(String.valueOf(140 - etTweet.getText().length()));
         etTweet.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

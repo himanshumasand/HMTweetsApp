@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.hmtweetsapp.R;
+import com.codepath.apps.hmtweetsapp.activities.TimelineActivity;
 import com.codepath.apps.hmtweetsapp.models.Tweet;
 import com.squareup.picasso.Picasso;
 
@@ -22,7 +23,7 @@ import java.util.Locale;
 /**
  * Adapter for the stream of tweets shown in the Timeline Activity
  */
-public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
+public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
     private static class ViewHolder {
         ImageView profilePic;
@@ -69,7 +70,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Tweet tweet = getItem(position);
+        final Tweet tweet = getItem(position);
 
         viewHolder.profilePic.setImageResource(0);
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.profilePic);
@@ -92,6 +93,13 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
         DecimalFormat formatter = new DecimalFormat("#,###,###");
         viewHolder.retweetCount.setText(formatter.format(tweet.getRetweetCount()));
         viewHolder.favCount.setText(formatter.format(tweet.getFavoriteCount()));
+
+        viewHolder.replyIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((TimelineActivity) getContext()).openComposeTweetDialog("@" + tweet.getUser().getScreenName() + " ");
+            }
+        });
 
         return convertView;
     }
