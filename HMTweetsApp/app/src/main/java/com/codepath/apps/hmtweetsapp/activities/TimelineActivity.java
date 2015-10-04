@@ -39,6 +39,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
     private ArrayList<Tweet> mTweetsArray;
     private TweetsArrayAdapter mTweetsAdapter;
     private ListView mLvTweets;
+    private ArrayList<Tweet> mCurrentUserTweetArray;
+    private String mUserProfilePicUrl;
 
     private SwipeRefreshLayout swipeContainer;
     private ImageView ivNewTweet;
@@ -60,39 +62,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_timeline, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_tweet) {
-            openComposeTweetDialog();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void openComposeTweetDialog() {
-        FragmentManager fm = getFragmentManager();
-        ComposeTweetDialog composeTweetDialog = ComposeTweetDialog.newInstance();
-        composeTweetDialog.show(fm, "fragment_compose_tweet");
-    }
-
-    public void onComposeTweetSuccess() {
-        populateTimeline(tweetsSinceId, tweetsMaxId);
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
@@ -103,6 +72,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
         populateTimeline(tweetsSinceId, tweetsMaxId);
 
         setupSwipeToRefresh();
+        getUserTimeline();
     }
 
     private void setupToolbar() {
@@ -111,6 +81,23 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
             @Override
             public void onClick(View v) {
                 openComposeTweetDialog();
+            }
+        });
+    }
+
+    /**
+     * Attaches the adapter to the listview
+     */
+    private void setupViewObjects() {
+        mLvTweets = (ListView) findViewById(R.id.lvTweets);
+        mTweetsArray = new ArrayList<>();
+        mTweetsAdapter = new TweetsArrayAdapter(this, mTweetsArray);
+        mLvTweets.setAdapter(mTweetsAdapter);
+        mLvTweets.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                populateTimeline(1, tweetsMaxId - 1);
+                return true;
             }
         });
     }
@@ -133,23 +120,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
     }
 
     /**
-     * Attaches the adapter to the listview
-     */
-    private void setupViewObjects() {
-        mLvTweets = (ListView) findViewById(R.id.lvTweets);
-        mTweetsArray = new ArrayList<>();
-        mTweetsAdapter = new TweetsArrayAdapter(this, mTweetsArray);
-        mLvTweets.setAdapter(mTweetsAdapter);
-        mLvTweets.setOnScrollListener(new EndlessScrollListener() {
-            @Override
-            public boolean onLoadMore(int page, int totalItemsCount) {
-                populateTimeline(1, tweetsMaxId - 1);
-                return true;
-            }
-        });
-    }
-
-    /**
      * Get the data from the api and populate the listView
      */
     private void populateTimeline(final long sinceId, long maxId) {
@@ -157,11 +127,10 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray jsonResponse) {
                 Log.d("DEBUG", jsonResponse.toString());
-                if(sinceId != 1) {
+                if (sinceId != 1) {
                     mTweetsArray.addAll(0, Tweet.fromJSONArray(jsonResponse));
                     mTweetsAdapter.notifyDataSetChanged();
-                }
-                else {
+                } else {
                     mTweetsAdapter.addAll(Tweet.fromJSONArray(jsonResponse));
                 }
                 swipeContainer.setRefreshing(false);
@@ -173,4 +142,37 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
             }
         }, sinceId, maxId);
     }
+
+    private void openComposeTweetDialog() {
+        FragmentManager fm = getFragmentManager();
+        ComposeTweetDialog composeTweetDialog = ComposeTweetDialog.newInstance(mUserProfilePicUrl);
+        composeTweetDialog.show(fm, "fragment_compose_tweet");
+    }
+
+    public void onComposeTweetSuccess() {
+        populateTimeline(tweetsSinceId, tweetsMaxId);
+    }
+
+    private void getUserTimeline() {
+        mCurrentUserTweetArray = new ArrayList<>();
+
+        mClient.getUserTimeline(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray jsonResponse) {
+                Log.d("DEBUG", jsonResponse.toString());
+                mCurrentUserTweetArray.addAll(Tweet.fromJSONArray(jsonResponse));
+                if(mCurrentUserTweetArray != null && mCurrentUserTweetArray.size() > 0) {
+                    mUserProfilePicUrl = mCurrentUserTweetArray.get(0).getUser().getProfileImageUrl();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
+            }
+        });
+
+
+    }
+
 }

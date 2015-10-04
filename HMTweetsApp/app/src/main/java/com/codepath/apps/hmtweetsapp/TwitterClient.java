@@ -48,6 +48,19 @@ public class TwitterClient extends OAuthBaseClient {
         getClient().get(apiUrl, params, handler);
 	}
 
+	/**
+	 * Gets the home timeline by making a GET call
+	 * @param handler   callback
+	 */
+	public void getUserTimeline(AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/user_timeline.json");
+		RequestParams params = new RequestParams();
+		params.put("screen_name", "MasandHimanshu");
+		params.put("count", 25);
+		params.put("since_id", 1);
+		getClient().get(apiUrl, params, handler);
+	}
+
     /**
      * Updates the authenticating user’s current status, also known as Tweeting.
      * @param handler   callback

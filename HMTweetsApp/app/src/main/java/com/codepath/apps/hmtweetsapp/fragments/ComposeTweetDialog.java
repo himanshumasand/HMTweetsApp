@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.codepath.apps.hmtweetsapp.R;
 import com.codepath.apps.hmtweetsapp.TwitterApplication;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.squareup.picasso.Picasso;
 
 import org.apache.http.Header;
 import org.json.JSONObject;
@@ -42,12 +43,11 @@ public class ComposeTweetDialog extends DialogFragment implements View.OnClickLi
         void onComposeTweetSuccess();
     }
 
-    public static ComposeTweetDialog newInstance() {
+    public static ComposeTweetDialog newInstance(String profilePicUrl) {
         ComposeTweetDialog fragment = new ComposeTweetDialog();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
+        Bundle args = new Bundle();
+        args.putString("url", profilePicUrl);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -85,6 +85,7 @@ public class ComposeTweetDialog extends DialogFragment implements View.OnClickLi
         btTweet = (Button) view.findViewById(R.id.btTweet);
         tvCharCount = (TextView) view.findViewById(R.id.tvCharCount);
 
+        Picasso.with(getActivity()).load(getArguments().getString("url")).into(ivUserPic);
         tvCharCount.setText("140");
         etTweet.addTextChangedListener(new TextWatcher() {
             @Override
