@@ -4,9 +4,12 @@ import android.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.codepath.apps.hmtweetsapp.R;
@@ -38,6 +41,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
     private ListView mLvTweets;
 
     private SwipeRefreshLayout swipeContainer;
+    private ImageView ivNewTweet;
 
     public static long getTweetsMaxId() {
         return tweetsMaxId;
@@ -93,11 +97,22 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
+        setupToolbar();
         setupViewObjects();
         mClient = TwitterApplication.getTwitterClient();
         populateTimeline(tweetsSinceId, tweetsMaxId);
 
         setupSwipeToRefresh();
+    }
+
+    private void setupToolbar() {
+        ivNewTweet = (ImageView) findViewById(R.id.ivComposeTweet);
+        ivNewTweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openComposeTweetDialog();
+            }
+        });
     }
 
     private void setupSwipeToRefresh() {

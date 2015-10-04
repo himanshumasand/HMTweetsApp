@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     tools:context="com.codepath.apps.hmtweetsapp.fragments.ComposeTweetDialog"
     android:padding="15dp">
 
@@ -27,16 +28,19 @@
         android:inputType="textMultiLine"
         android:hint="What&apos;s happening?"
         android:gravity="start"
-        android:lines="5" />
+        android:lines="5"/>
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
+        android:layout_height="40dp"
         android:text="Tweet"
+        android:textColor="#ffffff"
+        android:background="@color/twitter"
         android:id="@+id/btTweet"
         android:layout_below="@+id/etTweet"
         android:layout_alignRight="@+id/etTweet"
-        android:layout_alignEnd="@+id/etTweet" />
+        android:layout_alignEnd="@+id/etTweet"
+        android:layout_marginTop="10dp" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -110,7 +110,7 @@
         android:layout_alignBottom="@+id/ivRetweet"
         android:layout_toRightOf="@+id/ivRetweet"
         android:layout_toEndOf="@+id/ivRetweet"
-        android:paddingBottom="2dp"
+        android:paddingBottom="1dp"
         android:textSize="12sp"
         android:layout_marginLeft="5dp" />
 
@@ -129,7 +129,7 @@
         android:layout_height="wrap_content"
         android:text="xx"
         android:id="@+id/tvFavCount"
-        android:paddingBottom="2dp"
+        android:paddingBottom="1dp"
         android:textSize="12sp"
         android:textColor="#c8d3d9"
         android:layout_alignBottom="@+id/ivFavorite"
