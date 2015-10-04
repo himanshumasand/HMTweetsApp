@@ -1,6 +1,10 @@
 package com.codepath.apps.hmtweetsapp.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +17,7 @@ import com.codepath.apps.hmtweetsapp.R;
 import com.codepath.apps.hmtweetsapp.activities.TimelineActivity;
 import com.codepath.apps.hmtweetsapp.models.Tweet;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -74,6 +79,24 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
         viewHolder.profilePic.setImageResource(0);
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.profilePic);
+        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(getContext().getResources(), bitmap);
+                dr.setCornerRadius(2.0f);
+                viewHolder.profilePic.setImageDrawable(dr);
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        });
 
         viewHolder.name.setText(tweet.getUser().getName());
         viewHolder.screenName.setText("@" + tweet.getUser().getScreenName());

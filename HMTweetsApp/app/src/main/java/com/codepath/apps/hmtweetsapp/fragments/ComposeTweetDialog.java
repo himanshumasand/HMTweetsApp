@@ -2,8 +2,12 @@ package com.codepath.apps.hmtweetsapp.fragments;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -22,6 +26,7 @@ import com.codepath.apps.hmtweetsapp.R;
 import com.codepath.apps.hmtweetsapp.TwitterApplication;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.apache.http.Header;
 import org.json.JSONObject;
@@ -87,6 +92,24 @@ public class ComposeTweetDialog extends DialogFragment implements View.OnClickLi
         tvCharCount = (TextView) view.findViewById(R.id.tvCharCount);
 
         Picasso.with(getActivity()).load(getArguments().getString("url")).into(ivUserPic);
+        Picasso.with(getActivity()).load(getArguments().getString("url")).into(new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(getActivity().getResources(), bitmap);
+                dr.setCornerRadius(2.0f);
+                ivUserPic.setImageDrawable(dr);
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        });
         etTweet.setText(getArguments().getString("replyText"));
         etTweet.setSelection(etTweet.getText().length());
         tvCharCount.setText(String.valueOf(140 - etTweet.getText().length()));
