@@ -13,6 +13,7 @@ import com.codepath.apps.hmtweetsapp.R;
 import com.codepath.apps.hmtweetsapp.models.Tweet;
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -30,6 +31,13 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
         TextView time;
         TextView body;
         ImageView tweetImage;
+
+        //Action buttons at the bottom
+        ImageView replyIcon;
+        ImageView retweetIcon;
+        TextView retweetCount;
+        ImageView favIcon;
+        TextView favCount;
     }
 
     public TweetsArrayAdapter(Context context, List<Tweet> objects) {
@@ -49,6 +57,12 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
             viewHolder.time = (TextView) convertView.findViewById(R.id.tvTime);
             viewHolder.body = (TextView) convertView.findViewById(R.id.tvBody);
             viewHolder.tweetImage = (ImageView) convertView.findViewById(R.id.ivTweetImage);
+            viewHolder.replyIcon = (ImageView) convertView.findViewById(R.id.ivReply);
+            viewHolder.retweetIcon = (ImageView) convertView.findViewById(R.id.ivRetweet);
+            viewHolder.favIcon = (ImageView) convertView.findViewById(R.id.ivFavorite);
+            viewHolder.retweetCount = (TextView) convertView.findViewById(R.id.tvRetweetCount);
+            viewHolder.favCount = (TextView) convertView.findViewById(R.id.tvFavCount);
+
             convertView.setTag(viewHolder);
         }
         else {
@@ -73,10 +87,12 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
             viewHolder.tweetImage.setVisibility(View.GONE);
         }
 
-//        DecimalFormat formatter = new DecimalFormat("#,###,###");
-//        viewHolder.likes.setText(formatter.format(photo.getLikesCount()) + " likes");
-
         viewHolder.time.setText(getRelativeTimeAgo(tweet.getTimestamp()));
+
+        DecimalFormat formatter = new DecimalFormat("#,###,###");
+        viewHolder.retweetCount.setText(formatter.format(tweet.getRetweetCount()));
+        viewHolder.favCount.setText(formatter.format(tweet.getFavoriteCount()));
+
         return convertView;
     }
 
