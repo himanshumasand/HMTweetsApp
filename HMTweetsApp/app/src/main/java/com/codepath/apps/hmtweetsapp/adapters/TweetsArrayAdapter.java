@@ -29,6 +29,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
         TextView screenName;
         TextView time;
         TextView body;
+        ImageView tweetImage;
     }
 
     public TweetsArrayAdapter(Context context, List<Tweet> objects) {
@@ -47,7 +48,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
             viewHolder.screenName = (TextView) convertView.findViewById(R.id.tvScreenName);
             viewHolder.time = (TextView) convertView.findViewById(R.id.tvTime);
             viewHolder.body = (TextView) convertView.findViewById(R.id.tvBody);
-
+            viewHolder.tweetImage = (ImageView) convertView.findViewById(R.id.ivTweetImage);
             convertView.setTag(viewHolder);
         }
         else {
@@ -63,6 +64,14 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
         viewHolder.screenName.setText("@" + tweet.getUser().getScreenName());
 
         viewHolder.body.setText(tweet.getBody());
+
+        if(tweet.getImageUrl() != null && tweet.getImageUrl() != "") {
+            viewHolder.tweetImage.setVisibility(View.VISIBLE);
+            Picasso.with(getContext()).load(tweet.getImageUrl()).fit().into(viewHolder.tweetImage);
+        }
+        else {
+            viewHolder.tweetImage.setVisibility(View.GONE);
+        }
 
 //        DecimalFormat formatter = new DecimalFormat("#,###,###");
 //        viewHolder.likes.setText(formatter.format(photo.getLikesCount()) + " likes");

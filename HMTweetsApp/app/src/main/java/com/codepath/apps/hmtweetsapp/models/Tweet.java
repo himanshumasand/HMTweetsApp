@@ -15,6 +15,7 @@ public class Tweet {
 
     long id;
     String body;
+    String imageUrl;
     String timestamp;
     int retweetCount;
     int favoriteCount;
@@ -26,6 +27,10 @@ public class Tweet {
 
     public String getBody() {
         return body;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public String getTimestamp() {
@@ -58,6 +63,12 @@ public class Tweet {
             tweet.timestamp = jsonObject.getString("created_at");
             tweet.retweetCount = jsonObject.getInt("retweet_count");
             tweet.favoriteCount = jsonObject.getInt("favorite_count");
+            if(jsonObject.has("extended_entities") && jsonObject.getJSONObject("extended_entities") != null
+                    && jsonObject.getJSONObject("extended_entities").getJSONArray("media") != null
+                    && jsonObject.getJSONObject("extended_entities").getJSONArray("media").getJSONObject(0) != null
+                    && jsonObject.getJSONObject("extended_entities").getJSONArray("media").getJSONObject(0).getString("media_url") != null) {
+                tweet.imageUrl = jsonObject.getJSONObject("extended_entities").getJSONArray("media").getJSONObject(0).getString("media_url");
+            }
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
         } catch (JSONException e) {
             e.printStackTrace();

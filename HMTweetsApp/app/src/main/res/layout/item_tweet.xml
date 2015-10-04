@@ -68,4 +68,15 @@
         android:gravity="center_vertical|right"
         android:textSize="12sp" />
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="175dp"
+        android:id="@+id/ivTweetImage"
+        android:layout_below="@+id/tvBody"
+        android:layout_alignLeft="@+id/tvBody"
+        android:layout_alignStart="@+id/tvBody"
+        android:layout_marginTop="10dp"
+        android:scaleType="center"
+        android:adjustViewBounds="true" />
+
 </RelativeLayout>
