@@ -158,6 +158,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 if (!isNetworkAvailable()) {
+                    Log.d("DEBUG", "Size = " + String.valueOf(Tweet.allTweets().size()));
                     Toast.makeText(getApplicationContext(), "Please check your internet connection!", Toast.LENGTH_LONG).show();
                     mTweetsAdapter.addAll(Tweet.allTweets());
                 } else {
