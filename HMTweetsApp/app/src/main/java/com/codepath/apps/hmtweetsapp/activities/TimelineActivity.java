@@ -34,11 +34,14 @@ import java.util.ArrayList;
  */
 public class TimelineActivity extends AppCompatActivity implements ComposeTweetDialog.ComposeTweetDialogListener {
 
+    // Used for the since_id and max_id arguments in the api call to get home timeline
     private static long tweetsMaxId = Long.MAX_VALUE;
     private static long tweetsSinceId = 1;
 
+    //Checks if the call is the first call for the session
     private boolean firstApiCall = true;
 
+    //Data structures used to set up the home timeline list
     private TwitterClient mClient;
     private ArrayList<Tweet> mTweetsArray;
     private TweetsArrayAdapter mTweetsAdapter;
@@ -46,6 +49,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
     private ArrayList<Tweet> mCurrentUserTweetArray;
     private String mUserProfilePicUrl;
 
+    //Other UI related items in the activity
     private SwipeRefreshLayout swipeContainer;
     private ImageView ivNewTweet;
 
@@ -79,6 +83,9 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
         getUserTimeline();
     }
 
+    /**
+     * Sets up the toolbar on top of the activity
+     */
     private void setupToolbar() {
         ivNewTweet = (ImageView) findViewById(R.id.ivComposeTweet);
         ivNewTweet.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +117,9 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
         }
     }
 
+    /**
+     * Sets up the listener for pull to refresh
+     */
     private void setupSwipeToRefresh() {
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
@@ -141,10 +151,16 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray jsonResponse) {
                 Log.d("DEBUG", jsonResponse.toString());
+
+                //If the first call is successful, delete everything in the database and re-enter new data
+                //Happens only once per session
                 if (firstApiCall) {
                     new Delete().from(Tweet.class).execute();
                     firstApiCall = false;
                 }
+
+                //Used for pull to refresh. Does not clear the arrayList to reduce processing of redundant items.
+                //Also, using since_id gives only the new tweets and reduces redundant download of data
                 if (sinceId != 1) {
                     mTweetsArray.addAll(0, Tweet.fromJSONArray(jsonResponse));
                     mTweetsAdapter.notifyDataSetChanged();
@@ -157,6 +173,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                //If network is not available, fetch the data from the database
                 if (!isNetworkAvailable()) {
                     Log.d("DEBUG", "Size = " + String.valueOf(Tweet.allTweets().size()));
                     Toast.makeText(getApplicationContext(), "Please check your internet connection!", Toast.LENGTH_LONG).show();
@@ -168,16 +185,26 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
         }, sinceId, maxId);
     }
 
+    /**
+     * Opens up the fragment to compose a new tweet
+     * @param replyText     The screenname to be added while replying
+     */
     public void openComposeTweetDialog(String replyText) {
         FragmentManager fm = getFragmentManager();
         ComposeTweetDialog composeTweetDialog = ComposeTweetDialog.newInstance(mUserProfilePicUrl, replyText);
         composeTweetDialog.show(fm, "fragment_compose_tweet");
     }
 
+    /**
+     * Listener after a tweet has been successfully posted and compose tweet dialog is closed
+     */
     public void onComposeTweetSuccess() {
         populateTimeline(tweetsSinceId, tweetsMaxId);
     }
 
+    /**
+     * Gets the logged in user's timeline
+     */
     private void getUserTimeline() {
         mCurrentUserTweetArray = new ArrayList<>();
 
@@ -200,6 +227,10 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
         });
     }
 
+    /**
+     * Utility function to check if network is available
+     * @return      True if network is available
+     */
     private Boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

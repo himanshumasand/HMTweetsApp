@@ -38,6 +38,7 @@ The following **additional** features are implemented:
 
 * [x] Using a toolbar instead of the actionbar
 * [x] Rounded profile pictures using bitmaps
+* [x] Using since_id for pull to refresh and when a user composes a new tweet to minimize redundancy in fetching and processing new tweets
 
 ## Video Walkthrough 
 

@@ -32,6 +32,9 @@ import java.util.Locale;
  */
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
+    /**
+     * Holds all the view objects that need to be set up
+     */
     private static class ViewHolder {
         ImageView profilePic;
         TextView name;
@@ -48,6 +51,11 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         TextView favCount;
     }
 
+    /**
+     * Constructor
+     * @param context
+     * @param objects
+     */
     public TweetsArrayAdapter(Context context, List<Tweet> objects) {
         super(context, 0, objects);
     }
@@ -79,6 +87,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
         final Tweet tweet = getItem(position);
 
+        //Profile pic
         viewHolder.profilePic.setImageResource(0);
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.profilePic);
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(new Target() {
@@ -100,11 +109,13 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             }
         });
 
+        //Names
         viewHolder.name.setText(tweet.getUser().getName());
         viewHolder.screenName.setText("@" + tweet.getUser().getScreenName());
 
         viewHolder.body.setText(tweet.getBody());
 
+        //Adds/hides image depending on the data of the tweet
         if(tweet.getImageUrl() != null && tweet.getImageUrl() != "") {
             viewHolder.tweetImage.setVisibility(View.VISIBLE);
             Picasso.with(getContext()).load(tweet.getImageUrl()).fit().into(viewHolder.tweetImage);
@@ -129,6 +140,11 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         return convertView;
     }
 
+    /**
+     * Formats the time shown for each tweet
+     * @param rawJsonDate       raw timestamp returned from the api
+     * @return                  formatted time to be displayed to the user
+     */
     public String getRelativeTimeAgo(String rawJsonDate) {
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
         SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);

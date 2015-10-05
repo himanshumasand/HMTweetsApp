@@ -122,6 +122,10 @@ public class Tweet extends Model{
         return tweets;
     }
 
+    /**
+     * Utility function to get all tweets
+     * @return      All the tweets stored in the table
+     */
     public static List<Tweet> allTweets() {
         return new Select().from(Tweet.class).execute();
     }

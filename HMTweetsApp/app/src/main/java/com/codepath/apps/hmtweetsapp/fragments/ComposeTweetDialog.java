@@ -32,6 +32,9 @@ import org.apache.http.Header;
 import org.json.JSONObject;
 
 
+/**
+ * Fragment where a user can compose a new tweet
+ */
 public class ComposeTweetDialog extends DialogFragment implements View.OnClickListener {
 
     private ImageView ivUserPic;
@@ -40,9 +43,10 @@ public class ComposeTweetDialog extends DialogFragment implements View.OnClickLi
     private Button btTweet;
     private TextView tvCharCount;
 
-    public ComposeTweetDialog() {
-        // Required empty public constructor
-    }
+    /**
+     * Required empty public constructor
+     */
+    public ComposeTweetDialog() {}
 
     public interface ComposeTweetDialogListener {
         void onComposeTweetSuccess();
