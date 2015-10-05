@@ -1,6 +1,9 @@
 package com.codepath.apps.hmtweetsapp.activities;
 
 import android.app.FragmentManager;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +11,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.activeandroid.query.Delete;
 import com.codepath.apps.hmtweetsapp.R;
 import com.codepath.apps.hmtweetsapp.TwitterApplication;
 import com.codepath.apps.hmtweetsapp.TwitterClient;
@@ -31,6 +36,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
 
     private static long tweetsMaxId = Long.MAX_VALUE;
     private static long tweetsSinceId = 1;
+
+    private boolean firstApiCall = true;
 
     private TwitterClient mClient;
     private ArrayList<Tweet> mTweetsArray;
@@ -90,13 +97,17 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
         mTweetsArray = new ArrayList<>();
         mTweetsAdapter = new TweetsArrayAdapter(this, mTweetsArray);
         mLvTweets.setAdapter(mTweetsAdapter);
-        mLvTweets.setOnScrollListener(new EndlessScrollListener() {
-            @Override
-            public boolean onLoadMore(int page, int totalItemsCount) {
-                populateTimeline(1, tweetsMaxId - 1);
-                return true;
-            }
-        });
+        if(isNetworkAvailable()) {
+            mLvTweets.setOnScrollListener(new EndlessScrollListener() {
+                @Override
+                public boolean onLoadMore(int page, int totalItemsCount) {
+                    if (isNetworkAvailable()) {
+                        populateTimeline(1, tweetsMaxId - 1);
+                    }
+                    return true;
+                }
+            });
+        }
     }
 
     private void setupSwipeToRefresh() {
@@ -106,7 +117,13 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                populateTimeline(tweetsSinceId, tweetsMaxId);
+                if (isNetworkAvailable()) {
+                    populateTimeline(tweetsSinceId, tweetsMaxId);
+                }
+                else {
+                    swipeContainer.setRefreshing(false);
+                    Toast.makeText(getApplicationContext(), "Please check your internet connection!", Toast.LENGTH_LONG).show();
+                }
             }
         });
         // Configure the refreshing colors
@@ -124,6 +141,10 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray jsonResponse) {
                 Log.d("DEBUG", jsonResponse.toString());
+                if (firstApiCall) {
+                    new Delete().from(Tweet.class).execute();
+                    firstApiCall = false;
+                }
                 if (sinceId != 1) {
                     mTweetsArray.addAll(0, Tweet.fromJSONArray(jsonResponse));
                     mTweetsAdapter.notifyDataSetChanged();
@@ -131,11 +152,17 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
                     mTweetsAdapter.addAll(Tweet.fromJSONArray(jsonResponse));
                 }
                 swipeContainer.setRefreshing(false);
+                Log.d("DEBUG", String.valueOf(Tweet.allTweets().size()));
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("DEBUG", errorResponse.toString());
+                if (!isNetworkAvailable()) {
+                    Toast.makeText(getApplicationContext(), "Please check your internet connection!", Toast.LENGTH_LONG).show();
+                    mTweetsAdapter.addAll(Tweet.allTweets());
+                } else {
+                    Log.d("DEBUG", errorResponse.toString());
+                }
             }
         }, sinceId, maxId);
     }
@@ -158,18 +185,24 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
             public void onSuccess(int statusCode, Header[] headers, JSONArray jsonResponse) {
                 Log.d("DEBUG", jsonResponse.toString());
                 mCurrentUserTweetArray.addAll(Tweet.fromJSONArray(jsonResponse));
-                if(mCurrentUserTweetArray != null && mCurrentUserTweetArray.size() > 0) {
+                if (mCurrentUserTweetArray != null && mCurrentUserTweetArray.size() > 0) {
                     mUserProfilePicUrl = mCurrentUserTweetArray.get(0).getUser().getProfileImageUrl();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("DEBUG", errorResponse.toString());
+                if(isNetworkAvailable()) {
+                    Log.d("DEBUG", errorResponse.toString());
+                }
             }
         });
-
-
     }
 
+    private Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
 }

@@ -3,9 +3,11 @@ package com.codepath.apps.hmtweetsapp.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Debug;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -142,30 +144,36 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         }
 
         String[] words = relativeDate.split("\\s+");
-        switch (words[1]) {
-            case "second":
-            case "seconds":
-                relativeDate = words[0] + "s";
-                break;
-            case "minute":
-            case "minutes":
-                relativeDate = words[0] + "m";
-                break;
-            case "hour":
-            case "hours":
-                relativeDate = words[0] + "h";
-                break;
-            case "day":
-            case "days":
-                relativeDate = words[0] + "d";
-                break;
-            case "week":
-            case "weeks":
-                relativeDate = words[0] + "w";
-                break;
-            default:
-                relativeDate = "";
-                break;
+        if(words.length > 1) {
+            switch (words[1]) {
+                case "second":
+                case "seconds":
+                    relativeDate = words[0] + "s";
+                    break;
+                case "minute":
+                case "minutes":
+                    relativeDate = words[0] + "m";
+                    break;
+                case "hour":
+                case "hours":
+                    relativeDate = words[0] + "h";
+                    break;
+                case "day":
+                case "days":
+                    relativeDate = words[0] + "d";
+                    break;
+                case "week":
+                case "weeks":
+                    relativeDate = words[0] + "w";
+                    break;
+                default:
+                    relativeDate = "";
+                    break;
+            }
+        }
+        //Special case when the string returned is "Yesterday"
+        else {
+            relativeDate = "1d";
         }
         return relativeDate;
     }

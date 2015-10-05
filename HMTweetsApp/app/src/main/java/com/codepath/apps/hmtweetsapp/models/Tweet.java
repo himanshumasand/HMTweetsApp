@@ -1,5 +1,9 @@
 package com.codepath.apps.hmtweetsapp.models;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 import com.codepath.apps.hmtweetsapp.activities.TimelineActivity;
 
 import org.json.JSONArray;
@@ -7,22 +11,31 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Model that holds all information of a single tweet
  */
-public class Tweet {
+@Table(name = "Tweets")
+public class Tweet extends Model{
 
-    long id;
+    @Column(name = "TweetId", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+    long tweetId;
+    @Column(name = "Body")
     String body;
+    @Column(name = "ImageUrl")
     String imageUrl;
+    @Column(name = "Timestamp")
     String timestamp;
+    @Column(name = "RetweetCount")
     int retweetCount;
+    @Column(name = "FavoriteCount")
     int favoriteCount;
+    @Column(name = "User", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
     User user;
 
-    public long getId() {
-        return id;
+    public long getTweetId() {
+        return tweetId;
     }
 
     public String getBody() {
@@ -49,6 +62,7 @@ public class Tweet {
         return user;
     }
 
+    public Tweet() {}
     /**
      * Deserialize the JSON object and create a Tweet object
      * @param jsonObject    JSON object returned by the api for a single tweet
@@ -58,7 +72,7 @@ public class Tweet {
         Tweet tweet = new Tweet();
 
         try {
-            tweet.id = jsonObject.getLong("id");
+            tweet.tweetId = jsonObject.getLong("id");
             tweet.body = jsonObject.getString("text");
             tweet.timestamp = jsonObject.getString("created_at");
             tweet.retweetCount = jsonObject.getInt("retweet_count");
@@ -70,6 +84,7 @@ public class Tweet {
                 tweet.imageUrl = jsonObject.getJSONObject("extended_entities").getJSONArray("media").getJSONObject(0).getString("media_url");
             }
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
+            tweet.save();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -91,11 +106,11 @@ public class Tweet {
                 Tweet tweet = fromJSON(tweetJson);
                 if(tweet != null) {
                     tweets.add(tweet);
-                    if(tweet.id < TimelineActivity.getTweetsMaxId()) {
-                        TimelineActivity.setTweetsMaxId(tweet.id);
+                    if(tweet.tweetId < TimelineActivity.getTweetsMaxId()) {
+                        TimelineActivity.setTweetsMaxId(tweet.tweetId);
                     }
-                    if(tweet.id > TimelineActivity.getTweetsSinceId()) {
-                        TimelineActivity.setTweetsSinceId(tweet.id);
+                    if(tweet.tweetId > TimelineActivity.getTweetsSinceId()) {
+                        TimelineActivity.setTweetsSinceId(tweet.tweetId);
                     }
                 }
             } catch (JSONException e) {
@@ -105,5 +120,9 @@ public class Tweet {
         }
 
         return tweets;
+    }
+
+    public static List<Tweet> allTweets() {
+        return new Select().from(Tweet.class).execute();
     }
 }
