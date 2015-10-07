@@ -4,7 +4,6 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
-import com.codepath.apps.hmtweetsapp.activities.TimelineActivity;
 import com.codepath.apps.hmtweetsapp.fragments.TimelineFragment;
 
 import org.json.JSONArray;

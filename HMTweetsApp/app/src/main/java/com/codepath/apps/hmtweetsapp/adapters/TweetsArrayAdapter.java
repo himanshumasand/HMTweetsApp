@@ -3,11 +3,9 @@ package com.codepath.apps.hmtweetsapp.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.os.Debug;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.hmtweetsapp.R;
-import com.codepath.apps.hmtweetsapp.activities.TimelineActivity;
+import com.codepath.apps.hmtweetsapp.activities.HomeActivity;
 import com.codepath.apps.hmtweetsapp.models.Tweet;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -133,7 +131,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         viewHolder.replyIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((TimelineActivity) getContext()).openComposeTweetDialog("@" + tweet.getUser().getScreenName() + " ");
+                ((HomeActivity) getContext()).openComposeTweetDialog("@" + tweet.getUser().getScreenName() + " ");
             }
         });
 

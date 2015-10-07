@@ -4,38 +4,19 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.Toast;
 
-import com.activeandroid.query.Delete;
 import com.codepath.apps.hmtweetsapp.R;
-import com.codepath.apps.hmtweetsapp.TwitterApplication;
-import com.codepath.apps.hmtweetsapp.TwitterClient;
-import com.codepath.apps.hmtweetsapp.adapters.TweetsArrayAdapter;
 import com.codepath.apps.hmtweetsapp.fragments.ComposeTweetDialog;
 import com.codepath.apps.hmtweetsapp.fragments.TimelineFragment;
-import com.codepath.apps.hmtweetsapp.models.Tweet;
-import com.codepath.apps.hmtweetsapp.utils.EndlessScrollListener;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.apache.http.Header;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 /**
  * Activity that shows the stream of tweets
  */
-public class TimelineActivity extends AppCompatActivity implements ComposeTweetDialog.ComposeTweetDialogListener {
+public class HomeActivity extends AppCompatActivity implements ComposeTweetDialog.ComposeTweetDialogListener {
 
     //Fragments
     private TimelineFragment timelineFragment;
@@ -43,7 +24,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timeline);
+        setContentView(R.layout.activity_home);
 
         setupToolbar();
         setupFragments();
