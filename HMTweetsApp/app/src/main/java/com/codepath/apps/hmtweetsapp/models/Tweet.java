@@ -5,6 +5,7 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 import com.codepath.apps.hmtweetsapp.activities.TimelineActivity;
+import com.codepath.apps.hmtweetsapp.fragments.TimelineFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -106,11 +107,11 @@ public class Tweet extends Model{
                 Tweet tweet = fromJSON(tweetJson);
                 if(tweet != null) {
                     tweets.add(tweet);
-                    if(tweet.tweetId < TimelineActivity.getTweetsMaxId()) {
-                        TimelineActivity.setTweetsMaxId(tweet.tweetId);
+                    if(tweet.tweetId < TimelineFragment.getTweetsMaxId()) {
+                        TimelineFragment.setTweetsMaxId(tweet.tweetId);
                     }
-                    if(tweet.tweetId > TimelineActivity.getTweetsSinceId()) {
-                        TimelineActivity.setTweetsSinceId(tweet.tweetId);
+                    if(tweet.tweetId > TimelineFragment.getTweetsSinceId()) {
+                        TimelineFragment.setTweetsSinceId(tweet.tweetId);
                     }
                 }
             } catch (JSONException e) {

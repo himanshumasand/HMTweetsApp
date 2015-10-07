@@ -95,25 +95,28 @@ public class ComposeTweetDialog extends DialogFragment implements View.OnClickLi
         btTweet = (Button) view.findViewById(R.id.btTweet);
         tvCharCount = (TextView) view.findViewById(R.id.tvCharCount);
 
-        Picasso.with(getActivity()).load(getArguments().getString("url")).into(ivUserPic);
-        Picasso.with(getActivity()).load(getArguments().getString("url")).into(new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(getActivity().getResources(), bitmap);
-                dr.setCornerRadius(2.0f);
-                ivUserPic.setImageDrawable(dr);
-            }
+        if(getArguments().getString("url") != "") {
+            Picasso.with(getActivity()).load(getArguments().getString("url")).into(ivUserPic);
+            Picasso.with(getActivity()).load(getArguments().getString("url")).into(new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(getActivity().getResources(), bitmap);
+                    dr.setCornerRadius(2.0f);
+                    ivUserPic.setImageDrawable(dr);
+                }
 
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) {
 
-            }
+                }
 
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
 
-            }
-        });
+                }
+            });
+        }
+
         etTweet.setText(getArguments().getString("replyText"));
         etTweet.setSelection(etTweet.getText().length());
         tvCharCount.setText(String.valueOf(140 - etTweet.getText().length()));
