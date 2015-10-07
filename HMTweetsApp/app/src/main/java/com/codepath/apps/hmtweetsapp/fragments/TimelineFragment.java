@@ -34,41 +34,33 @@ import java.util.ArrayList;
 /**
  * Created by Himanshu on 10/6/2015.
  */
-public class TimelineFragment extends Fragment {
+public abstract class TimelineFragment extends Fragment {
 
     // Used for the since_id and max_id arguments in the api call to get home timeline
     private static long tweetsMaxId = Long.MAX_VALUE;
     private static long tweetsSinceId = 1;
 
     //Checks if the call is the first call for the session
-    private boolean firstApiCall = true;
+    protected boolean firstApiCall = true;
 
     //Data structures used to set up the home timeline list
-    private TwitterClient mClient;
-    private ArrayList<Tweet> mTweetsArray;
-    private TweetsArrayAdapter mTweetsAdapter;
-    private ListView mLvTweets;
-    private ArrayList<Tweet> mCurrentUserTweetArray;
+    protected TwitterClient client;
+    protected ArrayList<Tweet> mTweetsArray;
+    protected TweetsArrayAdapter mTweetsAdapter;
+    protected ListView mLvTweets;
+//    private ArrayList<Tweet> mCurrentUserTweetArray;
 
     //Other UI related items in the activity
     private View fragmentView;
-    private SwipeRefreshLayout swipeContainer;
+    protected SwipeRefreshLayout swipeContainer;
 
-    public static long getTweetsMaxId() {
-        return tweetsMaxId;
-    }
+    public static long getTweetsMaxId() { return tweetsMaxId; }
 
-    public static void setTweetsMaxId(long id) {
-        tweetsMaxId = id;
-    }
+    public static void setTweetsMaxId(long id) { tweetsMaxId = id; }
 
-    public static long getTweetsSinceId() {
-        return tweetsSinceId;
-    }
+    public static long getTweetsSinceId() { return tweetsSinceId; }
 
-    public static void setTweetsSinceId(long id) {
-        tweetsSinceId = id;
-    }
+    public static void setTweetsSinceId(long id) { tweetsSinceId = id; }
 
     @Nullable
     @Override
@@ -76,11 +68,11 @@ public class TimelineFragment extends Fragment {
         fragmentView = inflater.inflate(R.layout.fragment_timeline, container, false);
 
         setupViewObjects();
-        mClient = TwitterApplication.getTwitterClient();
+        client = TwitterApplication.getTwitterClient();
         populateTimeline(tweetsSinceId, tweetsMaxId);
 
         setupSwipeToRefresh();
-        getUserTimeline();
+//        getUserTimeline();
 
         return fragmentView;
     }
@@ -134,89 +126,13 @@ public class TimelineFragment extends Fragment {
     /**
      * Get the data from the api and populate the listView
      */
-    public void populateTimeline(final long sinceId, long maxId) {
-        mClient.getHomeTimeline(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray jsonResponse) {
-                Log.d("DEBUG", jsonResponse.toString());
-
-                //If the first call is successful, delete everything in the database and re-enter new data
-                //Happens only once per session
-                if (firstApiCall) {
-                    new Delete().from(Tweet.class).execute();
-                    firstApiCall = false;
-                }
-
-                //Used for pull to refresh. Does not clear the arrayList to reduce processing of redundant items.
-                //Also, using since_id gives only the new tweets and reduces redundant download of data
-                if (sinceId != 1) {
-                    mTweetsArray.addAll(0, Tweet.fromJSONArray(jsonResponse));
-                    mTweetsAdapter.notifyDataSetChanged();
-                } else {
-                    mTweetsAdapter.addAll(Tweet.fromJSONArray(jsonResponse));
-                }
-                swipeContainer.setRefreshing(false);
-                Log.d("DEBUG", String.valueOf(Tweet.allTweets().size()));
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                //If network is not available, fetch the data from the database
-                if (!isNetworkAvailable()) {
-                    Log.d("DEBUG", "Size = " + String.valueOf(Tweet.allTweets().size()));
-                    Toast.makeText(getActivity(), "Please check your internet connection!", Toast.LENGTH_LONG).show();
-                    mTweetsAdapter.addAll(Tweet.allTweets());
-                } else {
-                    Log.d("DEBUG", errorResponse.toString());
-                }
-            }
-        }, sinceId, maxId);
-    }
-
-    /**
-     * Gets the logged in user's timeline
-     */
-    private void getUserTimeline() {
-        mCurrentUserTweetArray = new ArrayList<>();
-
-        mClient.getUserTimeline(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray jsonResponse) {
-                Log.d("DEBUG", jsonResponse.toString());
-                mCurrentUserTweetArray.addAll(Tweet.fromJSONArray(jsonResponse));
-                if (mCurrentUserTweetArray != null && mCurrentUserTweetArray.size() > 0) {
-                    writeToSharedPreferences(getString(R.string.user_profile_pic_url),
-                            mCurrentUserTweetArray.get(0).getUser().getProfileImageUrl());
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                if (isNetworkAvailable()) {
-                    Log.d("DEBUG", errorResponse.toString());
-                }
-            }
-        });
-    }
-
-    /**
-     * Adds a key value pair to the shared preferences
-     * @param key       String for the key
-     * @param value     String for the value
-     */
-    private void writeToSharedPreferences(String key, String value) {
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(
-                getString(R.string.shared_preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(key, value);
-        editor.apply();
-    }
+    public abstract void populateTimeline(long sinceId, long maxId);
 
     /**
      * Utility function to check if network is available
      * @return      True if network is available
      */
-    private Boolean isNetworkAvailable() {
+    public Boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();

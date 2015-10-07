@@ -35,7 +35,8 @@ public class TwitterClient extends OAuthBaseClient {
 	/**
 	 * Gets the home timeline by making a GET call
 	 * @param handler   callback
-     * @param maxId
+     * @param sinceId
+	 * @param maxId
 	 */
 	public void getHomeTimeline(AsyncHttpResponseHandler handler, long sinceId, long maxId) {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
@@ -51,13 +52,36 @@ public class TwitterClient extends OAuthBaseClient {
 	/**
 	 * Gets the home timeline by making a GET call
 	 * @param handler   callback
+     * @param sinceId
+	 * @param maxId
 	 */
-	public void getUserTimeline(AsyncHttpResponseHandler handler) {
+	public void getMentionsTimeline(AsyncHttpResponseHandler handler, long sinceId, long maxId) {
+		String apiUrl = getApiUrl("statuses/mentions_timeline.json");
+		RequestParams params = new RequestParams();
+        params.put("count", 25);
+        params.put("since_id", sinceId);
+		if(maxId != Long.MAX_VALUE && sinceId == 1) {
+			params.put("max_id", maxId);
+		}
+        getClient().get(apiUrl, params, handler);
+	}
+
+	/**
+	 * Gets the home timeline by making a GET call
+	 * @param handler       callback
+     * @param screenName    the screenname of the user whose timeline is to be retrieved
+	 * @param sinceId
+	 * @param maxId
+	 */
+	public void getUserTimeline(AsyncHttpResponseHandler handler, String screenName, long sinceId, long maxId) {
 		String apiUrl = getApiUrl("statuses/user_timeline.json");
 		RequestParams params = new RequestParams();
-		params.put("screen_name", "MasandHimanshu");
+		params.put("screen_name", screenName);
 		params.put("count", 25);
-		params.put("since_id", 1);
+		params.put("since_id", sinceId);
+		if(maxId != Long.MAX_VALUE && sinceId == 1) {
+			params.put("max_id", maxId);
+		}
 		getClient().get(apiUrl, params, handler);
 	}
 

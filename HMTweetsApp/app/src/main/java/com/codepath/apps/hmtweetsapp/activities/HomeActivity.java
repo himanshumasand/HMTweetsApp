@@ -11,6 +11,8 @@ import android.widget.ImageView;
 
 import com.codepath.apps.hmtweetsapp.R;
 import com.codepath.apps.hmtweetsapp.fragments.ComposeTweetDialog;
+import com.codepath.apps.hmtweetsapp.fragments.HomeTimelineFragment;
+import com.codepath.apps.hmtweetsapp.fragments.MentionsTimelineFragment;
 import com.codepath.apps.hmtweetsapp.fragments.TimelineFragment;
 
 /**
@@ -19,7 +21,8 @@ import com.codepath.apps.hmtweetsapp.fragments.TimelineFragment;
 public class HomeActivity extends AppCompatActivity implements ComposeTweetDialog.ComposeTweetDialogListener {
 
     //Fragments
-    private TimelineFragment timelineFragment;
+    private HomeTimelineFragment homeTimelineFragment;
+    private MentionsTimelineFragment mentionsTimelineFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +48,13 @@ public class HomeActivity extends AppCompatActivity implements ComposeTweetDialo
     }
 
     private void setupFragments() {
-        timelineFragment = new TimelineFragment();
+        homeTimelineFragment = new HomeTimelineFragment();
+        mentionsTimelineFragment = new MentionsTimelineFragment();
     }
 
     private void setupTimeline() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.flTimeline, timelineFragment);
+        ft.replace(R.id.flTimeline, homeTimelineFragment);
         ft.addToBackStack(null);
         ft.commit();
     }
@@ -70,7 +74,7 @@ public class HomeActivity extends AppCompatActivity implements ComposeTweetDialo
      */
     public void onComposeTweetSuccess() {
         //tell the fragment to perform this operation
-        timelineFragment.populateTimeline(TimelineFragment.getTweetsSinceId(), TimelineFragment.getTweetsMaxId());
+        homeTimelineFragment.populateTimeline(TimelineFragment.getTweetsSinceId(), TimelineFragment.getTweetsMaxId());
     }
 
     private String getUserProfileImageUrl() {
