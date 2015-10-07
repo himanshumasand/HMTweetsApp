@@ -11,9 +11,6 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-/**
- * Created by Himanshu on 10/7/2015.
- */
 public class HomeTimelineFragment extends TimelineFragment {
 
     @Override
@@ -36,9 +33,11 @@ public class HomeTimelineFragment extends TimelineFragment {
                     mTweetsArray.addAll(0, Tweet.fromJSONArray(jsonResponse));
                     mTweetsAdapter.notifyDataSetChanged();
                 } else {
-                    mTweetsAdapter.addAll(Tweet.fromJSONArray(jsonResponse));
+                    mTweetsArray.addAll(Tweet.fromJSONArray(jsonResponse));
+                    mTweetsAdapter.notifyDataSetChanged();
                 }
 
+                setMinMaxTweetIds();
                 swipeContainer.setRefreshing(false);
                 Log.d("DEBUG", String.valueOf(Tweet.allTweets().size()));
             }

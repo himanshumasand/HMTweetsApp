@@ -2,33 +2,22 @@ package com.codepath.apps.hmtweetsapp.fragments;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import com.activeandroid.query.Delete;
 import com.codepath.apps.hmtweetsapp.R;
 import com.codepath.apps.hmtweetsapp.TwitterApplication;
 import com.codepath.apps.hmtweetsapp.TwitterClient;
 import com.codepath.apps.hmtweetsapp.adapters.TweetsArrayAdapter;
 import com.codepath.apps.hmtweetsapp.models.Tweet;
 import com.codepath.apps.hmtweetsapp.utils.EndlessScrollListener;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.apache.http.Header;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 /**
@@ -37,8 +26,8 @@ import java.util.ArrayList;
 public abstract class TimelineFragment extends Fragment {
 
     // Used for the since_id and max_id arguments in the api call to get home timeline
-    private static long tweetsMaxId = Long.MAX_VALUE;
-    private static long tweetsSinceId = 1;
+    private long tweetsMaxId = Long.MAX_VALUE;
+    private long tweetsSinceId = 1;
 
     //Checks if the call is the first call for the session
     protected boolean firstApiCall = true;
@@ -48,19 +37,14 @@ public abstract class TimelineFragment extends Fragment {
     protected ArrayList<Tweet> mTweetsArray;
     protected TweetsArrayAdapter mTweetsAdapter;
     protected ListView mLvTweets;
-//    private ArrayList<Tweet> mCurrentUserTweetArray;
 
     //Other UI related items in the activity
     private View fragmentView;
     protected SwipeRefreshLayout swipeContainer;
 
-    public static long getTweetsMaxId() { return tweetsMaxId; }
+    public long getTweetsMaxId() { return tweetsMaxId; }
 
-    public static void setTweetsMaxId(long id) { tweetsMaxId = id; }
-
-    public static long getTweetsSinceId() { return tweetsSinceId; }
-
-    public static void setTweetsSinceId(long id) { tweetsSinceId = id; }
+    public long getTweetsSinceId() { return tweetsSinceId; }
 
     @Nullable
     @Override
@@ -70,9 +54,7 @@ public abstract class TimelineFragment extends Fragment {
         setupViewObjects();
         client = TwitterApplication.getTwitterClient();
         populateTimeline(tweetsSinceId, tweetsMaxId);
-
         setupSwipeToRefresh();
-//        getUserTimeline();
 
         return fragmentView;
     }
@@ -127,6 +109,19 @@ public abstract class TimelineFragment extends Fragment {
      * Get the data from the api and populate the listView
      */
     public abstract void populateTimeline(long sinceId, long maxId);
+
+    protected void setMinMaxTweetIds() {
+        for (int i = 0; i < mTweetsArray.size(); i++) {
+            long id = mTweetsArray.get(i).getTweetId();
+            if(id < tweetsMaxId) {
+                tweetsMaxId = id;
+            }
+            if(id > tweetsSinceId) {
+                tweetsSinceId = id;
+            }
+        }
+    }
+
 
     /**
      * Utility function to check if network is available

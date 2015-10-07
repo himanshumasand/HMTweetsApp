@@ -29,6 +29,7 @@ public class MentionsTimelineFragment extends TimelineFragment {
                     mTweetsAdapter.notifyDataSetChanged();
                 }
 
+                setMinMaxTweetIds();
                 swipeContainer.setRefreshing(false);
                 Log.d("DEBUG", String.valueOf(Tweet.allTweets().size()));
             }

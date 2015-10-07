@@ -35,6 +35,7 @@ public class UserTimelineFragment extends TimelineFragment {
                             mTweetsArray.get(0).getUser().getProfileImageUrl());
                 }
 
+                setMinMaxTweetIds();
                 swipeContainer.setRefreshing(false);
                 Log.d("DEBUG", String.valueOf(Tweet.allTweets().size()));
             }

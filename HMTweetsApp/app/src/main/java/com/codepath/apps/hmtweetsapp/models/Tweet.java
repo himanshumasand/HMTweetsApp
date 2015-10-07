@@ -106,12 +106,6 @@ public class Tweet extends Model{
                 Tweet tweet = fromJSON(tweetJson);
                 if(tweet != null) {
                     tweets.add(tweet);
-                    if(tweet.tweetId < TimelineFragment.getTweetsMaxId()) {
-                        TimelineFragment.setTweetsMaxId(tweet.tweetId);
-                    }
-                    if(tweet.tweetId > TimelineFragment.getTweetsSinceId()) {
-                        TimelineFragment.setTweetsSinceId(tweet.tweetId);
-                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

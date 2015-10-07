@@ -74,7 +74,7 @@ public class HomeActivity extends AppCompatActivity implements ComposeTweetDialo
      */
     public void onComposeTweetSuccess() {
         //tell the fragment to perform this operation
-        homeTimelineFragment.populateTimeline(TimelineFragment.getTweetsSinceId(), TimelineFragment.getTweetsMaxId());
+        homeTimelineFragment.populateTimeline(homeTimelineFragment.getTweetsSinceId(), homeTimelineFragment.getTweetsMaxId());
     }
 
     private String getUserProfileImageUrl() {
