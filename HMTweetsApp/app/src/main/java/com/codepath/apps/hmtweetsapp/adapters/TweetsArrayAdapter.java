@@ -1,6 +1,8 @@
 package com.codepath.apps.hmtweetsapp.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import com.codepath.apps.hmtweetsapp.R;
 import com.codepath.apps.hmtweetsapp.activities.HomeActivity;
+import com.codepath.apps.hmtweetsapp.activities.ProfileActivity;
 import com.codepath.apps.hmtweetsapp.models.Tweet;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -110,6 +113,22 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         //Names
         viewHolder.name.setText(tweet.getUser().getName());
         viewHolder.screenName.setText("@" + tweet.getUser().getScreenName());
+
+        viewHolder.name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent profileIntent = new Intent(getContext(), ProfileActivity.class).putExtra("username", tweet.getUser().getName());
+                getContext().startActivity(profileIntent);
+            }
+        });
+
+        viewHolder.screenName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent profileIntent = new Intent(getContext(), ProfileActivity.class).putExtra("username", tweet.getUser().getName());
+                getContext().startActivity(profileIntent);
+            }
+        });
 
         viewHolder.body.setText(tweet.getBody());
 

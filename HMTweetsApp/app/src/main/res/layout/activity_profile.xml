@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:elevation="2dp" >
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/ivTwitterLogo"
+            android:src="@drawable/twitter_logo_white" />
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="end"
+            android:layout_marginRight="10dp"
+            android:id="@+id/ivComposeTweet"
+            android:src="@drawable/new_tweet" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/ivProfileBackground"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:src="@color/twitter" />
+
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:id="@+id/ivProfilePageProfileImage"
+        android:layout_alignBottom="@+id/ivProfileBackground"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginBottom="-30dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:id="@+id/tvProfilePageName"
+        android:layout_below="@+id/ivProfileBackground"
+        android:layout_alignLeft="@+id/ivProfilePageProfileImage"
+        android:layout_alignStart="@+id/ivProfilePageProfileImage"
+        android:layout_marginTop="40dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ScreenName"
+        android:id="@+id/tvProfilePageScreenName"
+        android:layout_below="@+id/tvProfilePageName"
+        android:layout_alignLeft="@+id/tvProfilePageName"
+        android:layout_alignStart="@+id/tvProfilePageName" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="xxx"
+        android:id="@+id/tvNumFollowing"
+        android:layout_below="@+id/tvProfilePageScreenName"
+        android:layout_alignLeft="@+id/tvProfilePageScreenName"
+        android:layout_alignStart="@+id/tvProfilePageScreenName" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FOLLOWING"
+        android:id="@+id/textView"
+        android:layout_alignBottom="@+id/tvNumFollowing"
+        android:layout_toRightOf="@+id/tvNumFollowing"
+        android:layout_toEndOf="@+id/tvNumFollowing" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="xxx"
+        android:id="@+id/tvNumFollowers"
+        android:layout_alignBottom="@+id/textView"
+        android:layout_toRightOf="@+id/textView"
+        android:layout_toEndOf="@+id/textView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FOLLOWERS"
+        android:id="@+id/textView2"
+        android:layout_alignBottom="@+id/tvNumFollowers"
+        android:layout_toRightOf="@+id/tvNumFollowers"
+        android:layout_toEndOf="@+id/tvNumFollowers" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tvNumFollowing"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/flUserTimeline" />
+</RelativeLayout>

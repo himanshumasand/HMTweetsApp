@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -40,6 +41,8 @@ public class HomeActivity extends AppCompatActivity implements ComposeTweetDialo
      * Sets up the toolbar on top of the activity
      */
     private void setupToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         ImageView ivNewTweet = (ImageView) findViewById(R.id.ivComposeTweet);
         ivNewTweet.setOnClickListener(new View.OnClickListener() {
             @Override
