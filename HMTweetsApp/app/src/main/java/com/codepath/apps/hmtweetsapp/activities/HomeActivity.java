@@ -1,19 +1,21 @@
 package com.codepath.apps.hmtweetsapp.activities;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.hmtweetsapp.R;
+import com.codepath.apps.hmtweetsapp.adapters.TimelineFragmentPagerAdapter;
 import com.codepath.apps.hmtweetsapp.fragments.ComposeTweetDialog;
 import com.codepath.apps.hmtweetsapp.fragments.HomeTimelineFragment;
 import com.codepath.apps.hmtweetsapp.fragments.MentionsTimelineFragment;
-import com.codepath.apps.hmtweetsapp.fragments.TimelineFragment;
 
 /**
  * Activity that shows the stream of tweets
@@ -31,7 +33,7 @@ public class HomeActivity extends AppCompatActivity implements ComposeTweetDialo
 
         setupToolbar();
         setupFragments();
-        setupTimeline();
+        setupViewPager();
     }
 
     /**
@@ -52,11 +54,11 @@ public class HomeActivity extends AppCompatActivity implements ComposeTweetDialo
         mentionsTimelineFragment = new MentionsTimelineFragment();
     }
 
-    private void setupTimeline() {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.flTimeline, homeTimelineFragment);
-        ft.addToBackStack(null);
-        ft.commit();
+    private void setupViewPager() {
+        ViewPager vPager = (ViewPager) findViewById(R.id.viewpager);
+        vPager.setAdapter( new TimelineFragmentPagerAdapter(getSupportFragmentManager(), this));
+        PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        tabStrip.setViewPager(vPager);
     }
 
     /**
@@ -64,7 +66,7 @@ public class HomeActivity extends AppCompatActivity implements ComposeTweetDialo
      * @param replyText     The screenname to be added while replying
      */
     public void openComposeTweetDialog(String replyText) {
-        FragmentManager fm = getFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
         ComposeTweetDialog composeTweetDialog = ComposeTweetDialog.newInstance(getUserProfileImageUrl(), replyText);
         composeTweetDialog.show(fm, "fragment_compose_tweet");
     }

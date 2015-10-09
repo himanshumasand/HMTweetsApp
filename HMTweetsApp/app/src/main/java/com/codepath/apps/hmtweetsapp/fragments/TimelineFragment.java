@@ -1,6 +1,6 @@
 package com.codepath.apps.hmtweetsapp.fragments;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -20,9 +20,6 @@ import com.codepath.apps.hmtweetsapp.models.Tweet;
 import com.codepath.apps.hmtweetsapp.utils.EndlessScrollListener;
 import java.util.ArrayList;
 
-/**
- * Created by Himanshu on 10/6/2015.
- */
 public abstract class TimelineFragment extends Fragment {
 
     // Used for the since_id and max_id arguments in the api call to get home timeline
