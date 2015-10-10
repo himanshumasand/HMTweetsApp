@@ -19,6 +19,8 @@ import com.codepath.apps.hmtweetsapp.models.User;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.text.DecimalFormat;
+
 public class ProfileActivity extends AppCompatActivity implements UserTimelineFragment.UserTimelineFragmentListener {
 
     private User mUser;
@@ -100,11 +102,13 @@ public class ProfileActivity extends AppCompatActivity implements UserTimelineFr
         screenName = (TextView) findViewById(R.id.tvProfilePageScreenName);
         screenName.setText("@" + mUser.getScreenName());
 
+        DecimalFormat formatter = new DecimalFormat("#,###,###");
+
         numFollowers = (TextView) findViewById(R.id.tvNumFollowers);
-        numFollowers.setText(String.valueOf(mUser.getNumFollowers()));
+        numFollowers.setText(formatter.format(mUser.getNumFollowers()));
 
         numFollowing = (TextView) findViewById(R.id.tvNumFollowing);
-        numFollowing.setText(String.valueOf(mUser.getNumFollowing()));
+        numFollowing.setText(formatter.format(mUser.getNumFollowing()));
 
     }
 
