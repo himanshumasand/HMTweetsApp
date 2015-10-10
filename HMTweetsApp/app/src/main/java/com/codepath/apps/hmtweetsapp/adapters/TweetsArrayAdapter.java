@@ -117,7 +117,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         viewHolder.name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent profileIntent = new Intent(getContext(), ProfileActivity.class).putExtra("username", tweet.getUser().getName());
+                Intent profileIntent = new Intent(getContext(), ProfileActivity.class).putExtra("screenName", tweet.getUser().getScreenName());
                 getContext().startActivity(profileIntent);
             }
         });
@@ -125,7 +125,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         viewHolder.screenName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent profileIntent = new Intent(getContext(), ProfileActivity.class).putExtra("username", tweet.getUser().getName());
+                Intent profileIntent = new Intent(getContext(), ProfileActivity.class).putExtra("screenName", tweet.getUser().getScreenName());
                 getContext().startActivity(profileIntent);
             }
         });

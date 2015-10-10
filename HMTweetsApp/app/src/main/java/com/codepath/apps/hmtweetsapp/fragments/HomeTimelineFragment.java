@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.activeandroid.query.Delete;
 import com.codepath.apps.hmtweetsapp.models.Tweet;
+import com.codepath.apps.hmtweetsapp.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -24,6 +25,7 @@ public class HomeTimelineFragment extends TimelineFragment {
                 //Happens only once per session
                 if (firstApiCall) {
                     new Delete().from(Tweet.class).execute();
+                    new Delete().from(User.class).execute();
                     firstApiCall = false;
                 }
 

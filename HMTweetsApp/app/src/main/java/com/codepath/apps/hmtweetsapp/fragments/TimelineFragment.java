@@ -43,6 +43,11 @@ public abstract class TimelineFragment extends Fragment {
 
     public long getTweetsSinceId() { return tweetsSinceId; }
 
+    /**
+     * Required empty public constructor
+     */
+    public TimelineFragment() {}
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

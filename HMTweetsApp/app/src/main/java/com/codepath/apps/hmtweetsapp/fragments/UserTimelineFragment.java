@@ -2,10 +2,12 @@ package com.codepath.apps.hmtweetsapp.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 import com.codepath.apps.hmtweetsapp.R;
 import com.codepath.apps.hmtweetsapp.models.Tweet;
+import com.codepath.apps.hmtweetsapp.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -13,8 +15,35 @@ import org.json.JSONObject;
 
 public class UserTimelineFragment extends TimelineFragment {
 
+    private User mUser;
+
+    public UserTimelineFragment() {}
+
+    public static UserTimelineFragment newInstance(String screenName) {
+        UserTimelineFragment fragment = new UserTimelineFragment();
+        Bundle args = new Bundle();
+        args.putString("screenName", screenName);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public interface UserTimelineFragmentListener {
+        void onUserInfoAvailable();
+    }
+
+    public User getUser() {
+        return mUser;
+    }
+
+    public void setUser(User user) {
+        mUser = user;
+        final UserTimelineFragmentListener listener = (UserTimelineFragmentListener) getActivity();
+        listener.onUserInfoAvailable();
+    }
+
     @Override
     public void populateTimeline(final long sinceId, long maxId) {
+        final String screenName = getArguments().getString("screenName");
         client.getUserTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray jsonResponse) {
@@ -30,9 +59,11 @@ public class UserTimelineFragment extends TimelineFragment {
                     mTweetsAdapter.notifyDataSetChanged();
                 }
 
-                if (mTweetsArray != null && mTweetsArray.size() > 0) {
+                setUser(mTweetsArray.get(0).getUser());
+
+                if (mTweetsArray != null && mTweetsArray.size() > 0 && mUser.getScreenName().equals("MasandHimanshu")) {
                     writeToSharedPreferences(getString(R.string.user_profile_pic_url),
-                            mTweetsArray.get(0).getUser().getProfileImageUrl());
+                            mUser.getProfileImageUrl());
                 }
 
                 setMinMaxTweetIds();
@@ -49,7 +80,7 @@ public class UserTimelineFragment extends TimelineFragment {
                     Log.d("DEBUG", errorResponse.toString());
                 }
             }
-        }, "MasandHimanshu", sinceId, maxId);
+        }, screenName, sinceId, maxId);
     }
 
     /**
