@@ -27,6 +27,14 @@
             android:id="@+id/ivComposeTweet"
             android:src="@drawable/new_tweet" />
 
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:id="@+id/ivProfile"
+            android:src="@drawable/ic_profile"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="end" />
+
     </android.support.v7.widget.Toolbar>
 
     <com.astuetz.PagerSlidingTabStrip

@@ -61,6 +61,10 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         super(context, 0, objects);
     }
 
+    public interface TweetsArrayAdapterListener {
+        void onReplyToTweet(String screenName);
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
@@ -110,6 +114,15 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             }
         });
 
+        viewHolder.profilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent profileIntent = new Intent(getContext(), ProfileActivity.class).putExtra("screenName", tweet.getUser().getScreenName());
+                getContext().startActivity(profileIntent);
+            }
+        });
+
+
         //Names
         viewHolder.name.setText(tweet.getUser().getName());
         viewHolder.screenName.setText("@" + tweet.getUser().getScreenName());
@@ -150,7 +163,9 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         viewHolder.replyIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((HomeActivity) getContext()).openComposeTweetDialog("@" + tweet.getUser().getScreenName() + " ");
+                TweetsArrayAdapterListener listener = (TweetsArrayAdapterListener) getContext();
+                ((TweetsArrayAdapterListener) getContext()).onReplyToTweet("@" + tweet.getUser().getScreenName() + " ");
+
             }
         });
 

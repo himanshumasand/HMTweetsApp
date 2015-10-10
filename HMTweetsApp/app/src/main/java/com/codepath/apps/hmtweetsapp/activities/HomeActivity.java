@@ -1,5 +1,6 @@
 package com.codepath.apps.hmtweetsapp.activities;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.hmtweetsapp.R;
 import com.codepath.apps.hmtweetsapp.adapters.TimelineFragmentPagerAdapter;
+import com.codepath.apps.hmtweetsapp.adapters.TweetsArrayAdapter;
 import com.codepath.apps.hmtweetsapp.fragments.ComposeTweetDialog;
 import com.codepath.apps.hmtweetsapp.fragments.HomeTimelineFragment;
 import com.codepath.apps.hmtweetsapp.fragments.MentionsTimelineFragment;
@@ -21,7 +23,7 @@ import com.codepath.apps.hmtweetsapp.fragments.MentionsTimelineFragment;
 /**
  * Activity that shows the stream of tweets
  */
-public class HomeActivity extends AppCompatActivity implements ComposeTweetDialog.ComposeTweetDialogListener {
+public class HomeActivity extends AppCompatActivity implements ComposeTweetDialog.ComposeTweetDialogListener, TweetsArrayAdapter.TweetsArrayAdapterListener {
 
     //Fragments
     private HomeTimelineFragment homeTimelineFragment;
@@ -48,6 +50,14 @@ public class HomeActivity extends AppCompatActivity implements ComposeTweetDialo
             @Override
             public void onClick(View v) {
                 openComposeTweetDialog("");
+            }
+        });
+        ImageView ivProfile = (ImageView) findViewById(R.id.ivProfile);
+        ivProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent profileIntent = new Intent(getApplicationContext(), ProfileActivity.class).putExtra("screenName", "MasandHimanshu");
+                startActivity(profileIntent);
             }
         });
     }
@@ -78,8 +88,7 @@ public class HomeActivity extends AppCompatActivity implements ComposeTweetDialo
      * Listener after a tweet has been successfully posted and compose tweet dialog is closed
      */
     public void onComposeTweetSuccess() {
-        //tell the fragment to perform this operation
-        homeTimelineFragment.populateTimeline(homeTimelineFragment.getTweetsSinceId(), homeTimelineFragment.getTweetsMaxId());
+        recreate();
     }
 
     private String getUserProfileImageUrl() {
@@ -90,5 +99,10 @@ public class HomeActivity extends AppCompatActivity implements ComposeTweetDialo
         url = sharedPref.getString(getString(R.string.user_profile_pic_url), "");
 
         return url;
+    }
+
+    @Override
+    public void onReplyToTweet(String screenName) {
+        openComposeTweetDialog(screenName);
     }
 }
